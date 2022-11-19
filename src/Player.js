@@ -1,4 +1,8 @@
-import { useKeyboardControls } from "@react-three/drei";
+import {
+  Environment,
+  useKeyboardControls,
+  useTexture,
+} from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
 import { RigidBody, useRapier } from "@react-three/rapier";
 import { useEffect, useRef, useState } from "react";
@@ -124,6 +128,16 @@ export default function Player() {
       unsubscribeReset();
     };
   }, []);
+
+  const props = useTexture({
+    map: "./texture/MetalStainlessSteelBrushedElongated005_COL_2K_METALNESS.jpg",
+    normalMap:
+      "./texture/MetalStainlessSteelBrushedElongated005_NRM_2K_METALNESS.jpg",
+    roughnessMap:
+      "./texture/MetalStainlessSteelBrushedElongated005_ROUGHNESS_2K_METALNESS.jpg",
+    metalnessMap:
+      "./texture/MetalStainlessSteelBrushedElongated005_METALNESS_2K_METALNESS.jpg",
+  });
   return (
     <RigidBody
       colliders="ball"
@@ -134,9 +148,10 @@ export default function Player() {
       linearDamping={0.5}
       angularDamping={0.5}
     >
+      <Environment preset="city" />
       <mesh castShadow>
-        <icosahedronGeometry args={[0.3, 1]} />
-        <meshStandardMaterial flatShading color="mediumpurple" />
+        <sphereGeometry args={[0.3, 64, 64]} />
+        <meshStandardMaterial metalness={1} roughness={0.1} {...props} />
       </mesh>
     </RigidBody>
   );
